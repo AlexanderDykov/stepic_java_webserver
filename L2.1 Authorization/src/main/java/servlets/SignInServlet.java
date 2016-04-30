@@ -24,14 +24,13 @@ public class SignInServlet extends HttpServlet {
         String login = req.getParameter("login");
         String pass = req.getParameter("password");
 
+        resp.setContentType("text/html;charset=utf-8");
         if (login == null || pass == null) {
-            resp.setContentType("text/html;charset=utf-8");
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
-
+        
         UserProfile profile = accountService.getUserByLogin(login);
-        resp.setContentType("text/html;charset=utf-8");
         if (profile != null && profile.getPass().equals(pass)) {
             resp.getWriter().println("Authorized: ".concat(login));
             resp.setStatus(HttpServletResponse.SC_OK);
