@@ -24,6 +24,10 @@ public class UserProfile {
         this.email = login;
     }
 
+    public UserProfile(String login, String pass) {
+        this(login, pass, login);
+    }
+
     public String getLogin() {
         return login;
     }
