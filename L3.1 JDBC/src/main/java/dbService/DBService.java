@@ -2,6 +2,7 @@ package dbService;
 
 import dbService.dao.UsersDAO;
 import dbService.dataSets.UsersDataSet;
+import main.UserProfile;
 import org.h2.jdbcx.JdbcDataSource;
 
 import java.sql.Connection;
@@ -22,22 +23,30 @@ public class DBService {
         this.connection = getH2Connection();
     }
 
-    public UsersDataSet getUser(long id) throws DBException {
+    public void create() throws DBException {
         try {
-            return (new UsersDAO(connection).get(id));
+            (new UsersDAO(connection)).createTable();
         } catch (SQLException e) {
             throw new DBException(e);
         }
     }
 
-    public long addUser(String name) throws DBException {
+    public UserProfile getUser(String login) throws DBException {
+        try {
+            UsersDataSet usersDataSet = new UsersDAO(connection).get(login);
+            return (new UserProfile(usersDataSet.getLogin(), usersDataSet.getPassword()));
+        } catch (SQLException e) {
+            throw new DBException(e);
+        }
+    }
+
+    public long addUser(UserProfile userProfile) throws DBException {
         try {
             connection.setAutoCommit(false);
             UsersDAO dao = new UsersDAO(connection);
-            dao.createTable();
-            dao.insertUser(name);
+            dao.insertUser(userProfile.getLogin(), userProfile.getPassword());
             connection.commit();
-            return dao.getUserId(name);
+            return dao.getUserId(userProfile.getLogin());
         } catch (SQLException e) {
             try {
                 connection.rollback();
@@ -89,8 +98,7 @@ public class DBService {
 
             System.out.println("URL: " + url + "\n");
 
-            Connection connection = DriverManager.getConnection(url.toString());
-            return connection;
+            return DriverManager.getConnection(url.toString());
         } catch (SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -100,16 +108,15 @@ public class DBService {
     public static Connection getH2Connection() {
         try {
             String url = "jdbc:h2:./h2db";
-            String name = "tully";
-            String pass = "tully";
+            String name = "test";
+            String pass = "test";
 
             JdbcDataSource ds = new JdbcDataSource();
             ds.setURL(url);
             ds.setUser(name);
             ds.setPassword(pass);
 
-            Connection connection = DriverManager.getConnection(url, name, pass);
-            return connection;
+            return DriverManager.getConnection(url, name, pass);
         } catch (SQLException e) {
             e.printStackTrace();
         }
