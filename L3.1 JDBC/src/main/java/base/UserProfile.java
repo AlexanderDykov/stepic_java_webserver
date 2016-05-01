@@ -1,4 +1,4 @@
-package main;
+package base;
 
 /**
  * Created by DUX on 01.05.2016.
