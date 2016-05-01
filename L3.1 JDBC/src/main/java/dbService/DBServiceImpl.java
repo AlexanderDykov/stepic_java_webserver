@@ -1,8 +1,9 @@
 package dbService;
 
+import base.DBService;
 import dbService.dao.UsersDAO;
 import dbService.dataSets.UsersDataSet;
-import main.UserProfile;
+import base.UserProfile;
 import org.h2.jdbcx.JdbcDataSource;
 
 import java.sql.Connection;
@@ -16,13 +17,14 @@ import java.sql.SQLException;
  *         <p>
  *         Описание курса и лицензия: https://github.com/vitaly-chibrikov/stepic_java_webserver
  */
-public class DBService {
+public class DBServiceImpl implements DBService{
     private final Connection connection;
 
-    public DBService() {
+    public DBServiceImpl() {
         this.connection = getH2Connection();
     }
 
+    @Override
     public void create() throws DBException {
         try {
             (new UsersDAO(connection)).createTable();
@@ -31,6 +33,7 @@ public class DBService {
         }
     }
 
+    @Override
     public UserProfile getUser(String login) throws DBException {
         try {
             UsersDataSet usersDataSet = new UsersDAO(connection).get(login);
@@ -40,6 +43,7 @@ public class DBService {
         }
     }
 
+    @Override
     public long addUser(UserProfile userProfile) throws DBException {
         try {
             connection.setAutoCommit(false);
@@ -61,6 +65,7 @@ public class DBService {
         }
     }
 
+    @Override
     public void cleanUp() throws DBException {
         UsersDAO dao = new UsersDAO(connection);
         try {
@@ -70,6 +75,7 @@ public class DBService {
         }
     }
 
+    @Override
     public void printConnectInfo() {
         try {
             System.out.println("DB name: " + connection.getMetaData().getDatabaseProductName());

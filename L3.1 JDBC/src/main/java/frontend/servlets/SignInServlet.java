@@ -1,8 +1,8 @@
 package frontend.servlets;
 
-import dbService.DBException;
-import dbService.DBService;
+import base.DBService;
 import base.UserProfile;
+import dbService.DBException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

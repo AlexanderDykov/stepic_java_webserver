@@ -1,14 +1,13 @@
 package main;
 
 
-import dbService.DBException;
-import dbService.DBService;
-import dbService.dataSets.UsersDataSet;
+import base.DBService;
+import dbService.DBServiceImpl;
+import frontend.servlets.SignInServlet;
+import frontend.servlets.SignUpServlet;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import servlets.SignInServlet;
-import servlets.SignUpServlet;
 
 /**
  * @author v.chibrikov
@@ -19,20 +18,7 @@ import servlets.SignUpServlet;
  */
 public class Main {
     public static void main(String[] args) throws Exception {
-       /* DBService dbService = new DBService();
-        dbService.printConnectInfo();
-        try {
-            long userId = dbService.addUser("tully");
-            System.out.println("Added user id: " + userId);
-
-            UsersDataSet dataSet = dbService.getUser(userId);
-            System.out.println("User data set: " + dataSet);
-
-            dbService.cleanUp();
-        } catch (DBException e) {
-            e.printStackTrace();
-        }*/
-        DBService dbService = new DBService();
+        DBService dbService = new DBServiceImpl();
         dbService.create();
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.addServlet(new ServletHolder(new SignInServlet(dbService)), "/signin");
