@@ -16,11 +16,6 @@ public class AccountServerController implements AccountServerControllerMBean {
     }
 
     @Override
-    public int getUsers() {
-        return accountServer.getUsersCount();
-    }
-
-    @Override
     public int getUsersLimit() {
         return accountServer.getUsersLimit();
     }

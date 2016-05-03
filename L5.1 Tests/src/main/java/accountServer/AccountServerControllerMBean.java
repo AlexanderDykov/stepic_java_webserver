@@ -10,7 +10,6 @@ package accountServer;
  */
 @SuppressWarnings("UnusedDeclaration")
 public interface AccountServerControllerMBean {
-    public int getUsers();
 
     public int getUsersLimit();
 
